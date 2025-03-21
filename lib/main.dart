@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'screens/intro_screen.dart';
+import 'screens/intro_screen.dart'; // ⚠️ 반드시 이 경로여야 합니다!
 
 void main() {
   runApp(const MyApp());
@@ -14,7 +14,6 @@ class MyApp extends StatelessWidget {
       title: '같이가',
       theme: ThemeData(
         primarySwatch: Colors.green,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: const IntroScreen(),
     );
