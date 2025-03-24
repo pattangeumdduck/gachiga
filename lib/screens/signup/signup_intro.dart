@@ -1,14 +1,14 @@
-// screens/signup_intro.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import '../controllers/signup_controller.dart';
-import 'signup_form.dart';
+import 'package:gachiga1/controllers/signup_controller.dart';
+import 'package:gachiga1/screens/signup_form.dart';
 
 class SignupIntroScreen extends StatelessWidget {
   const SignupIntroScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // SignupController를 인스턴스화 (최초 한 번)
     final SignupController controller = Get.put(SignupController());
 
     return Scaffold(
@@ -41,3 +41,4 @@ class SignupIntroScreen extends StatelessWidget {
     );
   }
 }
+

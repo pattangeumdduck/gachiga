@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'user_type_selection_screen.dart';
+import 'package:gachiga1/screens/user_type_selection_screen.dart';
 
 class IntroScreen extends StatelessWidget {
   const IntroScreen({super.key});
@@ -44,7 +44,6 @@ class IntroScreen extends StatelessWidget {
                 textStyle: const TextStyle(fontSize: 16),
               ),
               onPressed: () {
-                // Navigator.push 대신 Get.to() 사용 가능 (getX 활용)
                 Get.to(() => const UserTypeSelectionScreen());
               },
               child: const Text('시작하기'),
