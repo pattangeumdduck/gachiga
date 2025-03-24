@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:gachiga1/controllers/signup_controller.dart';
+import 'package:gachiga1/screens/signup/signup_intro.dart';
 
 class UserTypeSelectionScreen extends StatelessWidget {
   const UserTypeSelectionScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final SignupController controller = Get.find<SignupController>();
     return Scaffold(
       appBar: AppBar(
         title: const Text('회원 유형 선택'),
@@ -25,7 +29,8 @@ class UserTypeSelectionScreen extends StatelessWidget {
                 minimumSize: const Size(double.infinity, 60),
               ),
               onPressed: () {
-                // 시니어 회원가입 화면 이동 (추후 구현)
+                controller.setUserType('senior');
+                Get.to(() => const SignupIntroScreen());
               },
               child: const Text('시니어로 가입하기'),
             ),
@@ -35,7 +40,8 @@ class UserTypeSelectionScreen extends StatelessWidget {
                 minimumSize: const Size(double.infinity, 60),
               ),
               onPressed: () {
-                // 주니어 회원가입 화면 이동 (추후 구현)
+                controller.setUserType('junior');
+                Get.to(() => const SignupIntroScreen());
               },
               child: const Text('주니어로 가입하기'),
             ),

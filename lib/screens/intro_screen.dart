@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'user_type_selection_screen.dart';
 
 class IntroScreen extends StatelessWidget {
@@ -23,9 +24,10 @@ class IntroScreen extends StatelessWidget {
             const Text(
               '같이가',
               style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 36,
-                  fontWeight: FontWeight.bold),
+                color: Colors.white,
+                fontSize: 36,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             const SizedBox(height: 20),
             const Text(
@@ -42,12 +44,8 @@ class IntroScreen extends StatelessWidget {
                 textStyle: const TextStyle(fontSize: 16),
               ),
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const UserTypeSelectionScreen(),
-                  ),
-                );
+                // Navigator.push 대신 Get.to() 사용 가능 (getX 활용)
+                Get.to(() => const UserTypeSelectionScreen());
               },
               child: const Text('시작하기'),
             ),
@@ -57,7 +55,10 @@ class IntroScreen extends StatelessWidget {
               },
               child: const Text(
                 '로그인하기',
-                style: TextStyle(color: Colors.white, decoration: TextDecoration.underline),
+                style: TextStyle(
+                  color: Colors.white,
+                  decoration: TextDecoration.underline,
+                ),
               ),
             ),
           ],
