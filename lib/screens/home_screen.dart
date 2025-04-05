@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gachiga1/controllers/auth_controller.dart';
-
+import 'package:gachiga1/screens/my_page_screen.dart';
+import 'package:gachiga1/screens/care_screen.dart';
+import 'package:gachiga1/screens/matching_screen.dart';
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -14,9 +16,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   final List<Widget> _pages = [
     Center(child: Text('홈')),
-    Center(child: Text('매칭')),
-    Center(child: Text('케어')),
-    Center(child: Text('마이')),
+    MatchingScreen(),
+    CareScreen(),
+    MyPageScreen(),
   ];
 
   @override
