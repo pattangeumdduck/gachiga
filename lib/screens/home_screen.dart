@@ -4,6 +4,7 @@ import 'package:gachiga1/controllers/auth_controller.dart';
 import 'package:gachiga1/screens/my_page_screen.dart';
 import 'package:gachiga1/screens/care_screen.dart';
 import 'package:gachiga1/screens/matching_screen.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -13,13 +14,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
-
-  final List<Widget> _pages = [
-    Center(child: Text('홈')),
-    MatchingScreen(),
-    CareScreen(),
-    MyPageScreen(),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -32,11 +26,9 @@ class _HomeScreenState extends State<HomeScreen> {
           Obx(() => TextButton(
                 onPressed: () {
                   if (authController.isLoggedIn.value) {
-                    // 로그아웃 상태로 변경
                     authController.logout();
                     Get.snackbar('로그아웃', '로그아웃 되었습니다');
                   } else {
-                    // 로그인 화면으로 이동 (라우트 이름을 사용할 수도 있음)
                     Get.toNamed('/login');
                   }
                 },
@@ -47,12 +39,20 @@ class _HomeScreenState extends State<HomeScreen> {
               )),
         ],
       ),
-      body: _pages[_selectedIndex],
+      body: IndexedStack(
+        index: _selectedIndex,
+        children: [
+          Center(child: Text('홈', style: Theme.of(context).textTheme.headlineSmall)),
+          const MatchingScreen(),
+          const CareScreen(),
+          const MyPageScreen(),
+        ],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
         onTap: (index) => setState(() => _selectedIndex = index),
         type: BottomNavigationBarType.fixed,
-        selectedItemColor: Colors.green,
+        selectedItemColor: Theme.of(context).primaryColor,
         unselectedItemColor: Colors.grey,
         items: const [
           BottomNavigationBarItem(
