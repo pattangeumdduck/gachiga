@@ -1,71 +1,115 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gachiga1/screens/home_screen.dart';
-import 'package:gachiga1/controllers/auth_controller.dart';
+import 'package:gachiga1/widgets/custom_snackbar.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final TextEditingController emailController = TextEditingController();
-    final TextEditingController passwordController = TextEditingController();
-    final AuthController authController = Get.find<AuthController>();
+    final size = MediaQuery.of(context).size;
+    final emailController = TextEditingController();
+    final passwordController = TextEditingController();
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('로그인'),
-      ),
-      body: Center(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(24.0),
-          child: Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(12),
-            ),
-            elevation: 4,
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    '로그인',
-                    style: Theme.of(context).textTheme.headlineSmall,
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: SingleChildScrollView( // ✅ overflow 방지
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Column(
+              children: [
+                const SizedBox(height: 80), // 약간 줄임
+                Center(
+                  child: Image.asset(
+                    'assets/images/logo.png',
+                    width: size.width * 0.5,
+                    height: size.width * 0.5,
                   ),
-                  const SizedBox(height: 16),
-                  TextFormField(
-                    controller: emailController,
-                    decoration: const InputDecoration(
-                      labelText: '이메일',
-                      hintText: '이메일을 입력하세요',
+                ),
+                const SizedBox(height: 16),
+                const Text(
+                  '',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                SizedBox(height: size.height * 0.2), // 수정된 코드
+                // ✅ 하단 로그인 폼
+                Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Checkbox(
+                              value: true,
+                              onChanged: (_) {},
+                              materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                            ),
+                            const Text('자동로그인'),
+                          ],
+                        ),
+                        TextButton(
+                          onPressed: () {},
+                          child: const Text('아이디 / 비밀번호 찾기'),
+                        ),
+                      ],
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                  TextFormField(
-                    controller: passwordController,
-                    obscureText: true,
-                    decoration: const InputDecoration(
-                      labelText: '비밀번호',
-                      hintText: '비밀번호를 입력하세요',
+                    const SizedBox(height: 8),
+                    TextFormField(
+                      controller: emailController,
+                      decoration: InputDecoration(
+                        hintText: '이메일',
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 24),
-                  ElevatedButton(
-                    onPressed: () {
-                      final email = emailController.text;
-                      final password = passwordController.text;
-                      if (email.isEmpty || password.isEmpty) {
-                        Get.snackbar('오류', '이메일과 비밀번호를 입력해주세요');
-                        return;
-                      }
-                      authController.login();
-                      Get.offAll(() => const HomeScreen());
-                    },
-                    child: const Text('로그인'),
-                  ),
-                ],
-              ),
+                    const SizedBox(height: 12),
+                    TextFormField(
+                      controller: passwordController,
+                      obscureText: true,
+                      decoration: InputDecoration(
+                        hintText: '비밀번호',
+                        suffixIcon: const Icon(Icons.visibility_off),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 56,
+                      child: ElevatedButton(                       
+                        onPressed: () {
+                          if (emailController.text.isEmpty || passwordController.text.isEmpty) {
+                            showCustomSnackbar(
+                              title: '오류',
+                              message: '이메일과 비밀번호를 입력해주세요',
+                            );
+                            return;
+                          }
+                          Get.offAll(() => const HomeScreen());
+                        },
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                        ),
+                        child: const Text('로그인'),
+                      ),
+                    ),
+                    const SizedBox(height: 40), // 마지막 여백
+                  ],
+                ),
+              ],
             ),
           ),
         ),

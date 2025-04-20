@@ -1,81 +1,85 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:gachiga1/screens/user_type_selection_screen.dart';
 import 'package:gachiga1/screens/login.dart';
+import 'package:gachiga1/screens/user_type_selection_screen.dart';
 
 class IntroScreen extends StatelessWidget {
   const IntroScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final size = MediaQuery.of(context).size;
+
     return Scaffold(
-      body: Container(
-        padding: const EdgeInsets.all(24.0),
-        width: double.infinity,
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.green.shade300, Colors.green.shade600],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              '같이가',
-              style: Theme.of(context)
-                  .textTheme
-                  .headlineSmall
-                  ?.copyWith(color: Colors.white),
-            ),
-            const SizedBox(height: 20),
-            Text(
-              '함께하는 돌봄 서비스\n더 안전하고 따뜻한 동행을 시작하세요.',
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyMedium
-                  ?.copyWith(color: Colors.white),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 50),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
-                foregroundColor: Colors.green,
-                padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                textStyle: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Spacer(flex: 2),
+              // ✅ 반응형 로고
+              Image.asset(
+                'assets/images/logo.png',
+                width: size.width * 0.6,
+                height: size.width * 0.6,
               ),
-              onPressed: () {
-                Get.to(() => UserTypeSelectionScreen());
-              },
-              child: const Text('시작할까요?'),
-            ),
-            const SizedBox(height: 20),
-            GestureDetector(
-              onTap: () {
-                Get.to(() => const LoginScreen());
-              },
-              child: const Text.rich(
-                TextSpan(
-                  text: '아이디가 있나요? ',
-                  style: TextStyle(color: Colors.white),
-                  children: [
-                    TextSpan(
-                      text: '로그인하기',
-                      style: TextStyle(
-                        decoration: TextDecoration.underline,
-                        fontWeight: FontWeight.bold,
-                      ),
+              const SizedBox(height: 16),
+              Text(
+                '확정 시 텍스트 or welcome 문구',
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black87,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const Spacer(flex: 3),
+              SizedBox(
+                width: double.infinity,
+                height: 56,
+                child: ElevatedButton(
+                  onPressed: () => Get.to(() => const LoginScreen()),
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
                     ),
-                  ],
+                  ),
+                  child: const Text('로그인'),
                 ),
               ),
-            ),
-          ],
+              const SizedBox(height: 16),
+              OutlinedButton(
+                onPressed: () => Get.to(() => UserTypeSelectionScreen()),
+                style: OutlinedButton.styleFrom(
+                  minimumSize: const Size(double.infinity, 56),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  side: BorderSide(color: theme.primaryColor),
+                ),
+                child: const Text.rich(
+                  TextSpan(
+                    text: '회원이 아니신가요? ',
+                    style: TextStyle(color: Colors.black87),
+                    children: [
+                      TextSpan(
+                        text: '회원가입 하기',
+                        style: TextStyle(
+                          color: Color(0xFF0062FF),
+                          fontWeight: FontWeight.bold,
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const Spacer(),
+            ],
+          ),
         ),
       ),
     );

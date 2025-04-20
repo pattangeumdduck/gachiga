@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:gachiga1/controllers/signup_controller.dart';
 import 'package:gachiga1/screens/survey_junior.dart';
 import 'package:gachiga1/screens/survey_senior.dart';
+import 'package:gachiga1/widgets/custom_snackbar.dart';
 
 class SignupFormScreen extends StatefulWidget {
   const SignupFormScreen({Key? key}) : super(key: key);
@@ -104,18 +105,26 @@ class _SignupFormScreenState extends State<SignupFormScreen> {
                                 GestureDetector(
                                   onTap: () => _pickDate(context),
                                   child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 12, vertical: 16),
+                                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
                                     decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.grey.shade300),
                                       borderRadius: BorderRadius.circular(8),
-                                      border: Border.all(
-                                          color: Colors.grey.shade300),
                                     ),
-                                    child: Text(
-                                      _selectedDate == null
-                                          ? 'YYYY / MM / DD'
-                                          : _formatDate(_selectedDate!),
-                                      style: theme.textTheme.bodyMedium,
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          _selectedDate == null
+                                              ? 'YYYY / MM / DD'
+                                              : _formatDate(_selectedDate!),
+                                          style: theme.textTheme.bodyMedium?.copyWith(
+                                            color: _selectedDate == null
+                                                ? Colors.grey
+                                                : Colors.black87,
+                                          ),
+                                        ),
+                                        const Icon(Icons.calendar_today, size: 18, color: Colors.grey),
+                                      ],
                                     ),
                                   ),
                                 ),
@@ -137,13 +146,11 @@ class _SignupFormScreenState extends State<SignupFormScreen> {
                         },
                         children: const [
                           Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 12),
+                            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                             child: Text('남자'),
                           ),
                           Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 12),
+                            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                             child: Text('여자'),
                           ),
                         ],
@@ -233,7 +240,10 @@ class _SignupFormScreenState extends State<SignupFormScreen> {
                         onPressed: () {
                           if (_formKey.currentState!.validate()) {
                             if (_selectedDate == null) {
-                              Get.snackbar('오류', '생년월일을 선택해주세요');
+                              showCustomSnackbar(
+                                title: '제출 실패',
+                                message: '필수 항목을 모두 입력해주세요',
+                              );
                               return;
                             }
 
