@@ -5,6 +5,7 @@ import 'package:gachiga1/controllers/auth_controller.dart';
 import 'package:gachiga1/controllers/signup_controller.dart';
 import 'package:gachiga1/screens/intro_screen.dart';
 import 'package:gachiga1/theme.dart'; // theme.dart가 있다면 import
+import 'package:gachiga1/screens/splash_screen.dart'; 
 
 void main() {
   runApp(const GachigaApp());
@@ -19,7 +20,7 @@ class GachigaApp extends StatelessWidget {
       title: 'Gachiga',
       theme: AppTheme.lightTheme, // theme.dart에서 정의한 테마
       debugShowCheckedModeBanner: false,
-      home: const IntroScreen(),
+      home: const SplashScreen(),
       initialBinding: BindingsBuilder(() {
         Get.put(AuthController());
         Get.put(SignupController());

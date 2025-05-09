@@ -1,6 +1,8 @@
-// 📄 survey_senior.dart
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:gachiga1/screens/signup_complete_screen.dart';
+import 'package:gachiga1/widgets/custom_snackbar.dart';
 
 class SeniorSurveyScreen extends StatefulWidget {
   const SeniorSurveyScreen({super.key});
@@ -13,13 +15,16 @@ class _SeniorSurveyScreenState extends State<SeniorSurveyScreen> {
   final TextEditingController reasonController = TextEditingController();
   final TextEditingController otherServiceController = TextEditingController();
   final TextEditingController healthNoteController = TextEditingController();
-  String careDuration = '';
-  final Map<String, bool> services = {
-    '식사 준비': false,
-    '말벗 및 정서적 교류': false,
-    '병원 동행': false,
-    '가벼운 집안일': false,
-  };
+
+  double careHours = 1;
+  List<String> selectedServices = [];
+
+  final List<Map<String, String>> careOptions = [
+    {'label': '정서 교류 및 관계 형성', 'desc': '정서적 돌봄: 말벗, 식사 함께하기 등'},
+    {'label': '생활 및 자립 지원', 'desc': '정리정돈, 식사 준비, 인지자극 활동 등'},
+    {'label': '건강관리 보조', 'desc': '약 복용, 간단한 스트레칭 등'},
+    {'label': '외출 동행', 'desc': '병원/약국 동행, 산책, 행정적 도움 등'},
+  ];
 
   @override
   void dispose() {
@@ -32,6 +37,7 @@ class _SeniorSurveyScreenState extends State<SeniorSurveyScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
     return Scaffold(
       appBar: AppBar(title: const Text('회원가입')),
       body: SafeArea(
@@ -68,29 +74,92 @@ class _SeniorSurveyScreenState extends State<SeniorSurveyScreen> {
                   children: [
                     _buildTitle("1. 돌봄이 필요한 이유"),
                     _buildInput(reasonController),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 24),
 
-                    _buildTitle("2. 필요한 돌봄 서비스 (중복 선택 가능)"),
-                    ...services.keys.map((service) => CheckboxListTile(
-                          title: Text(service),
-                          value: services[service],
-                          onChanged: (val) =>
-                              setState(() => services[service] = val ?? false),
-                        )),
-                    _buildInput(otherServiceController, hint: '기타 (직접 작성)'),
-                    const SizedBox(height: 16),
+                    _buildTitle("2. 필요한 돌봄 서비스 (다중선택 가능)"),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: careOptions.map((item) {
+                        final selected = selectedServices.contains(item['label']);
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 4),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              FilterChip(
+                                label: Text(item['label']!),
+                                selected: selected,
+                                onSelected: (bool value) {
+                                  setState(() {
+                                    if (value) {
+                                      selectedServices.add(item['label']!);
+                                    } else {
+                                      selectedServices.remove(item['label']!);
+                                    }
+                                  });
+                                },
+                              ),
+                              const SizedBox(height: 4),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 8),
+                                child: Text(
+                                  item['desc']!,
+                                  style: const TextStyle(fontSize: 12, color: Colors.grey),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                    const SizedBox(height: 12),
+                    _buildInput(otherServiceController, hint: "기타 (직접 작성)"),
+                    const SizedBox(height: 24),
 
                     _buildTitle("3. 하루에 필요한 돌봄 시간은?"),
-                    _buildChoiceChips([
-                      '1~2시간',
-                      '3~4시간',
-                      '5시간 이상'
-                    ], careDuration, (val) {
-                      setState(() => careDuration = val);
-                    }),
-                    const SizedBox(height: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: List.generate(4, (index) {
+                        final labels = ['1-2시간', '3-4시간', '5-6시간', '7시간 이상'];
+                        final isActive = careHours.round() == index + 1;
+                        return Text(
+                          labels[index],
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: isActive ? theme.primaryColor : Colors.grey,
+                            fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
+                          ),
+                        );
+                      }),
+                    ),
+                    Text(
+                      getCareHourLabel(),
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue,
+                      ),
+                    ),
+                    SliderTheme(
+                      data: SliderTheme.of(context).copyWith(
+                        activeTrackColor: theme.primaryColor,
+                        inactiveTrackColor: Colors.grey.shade300,
+                        thumbColor: theme.primaryColor,
+                        overlayColor: theme.primaryColor.withAlpha(51),
+                        trackHeight: 3.0,
+                      ),
+                      child: Slider(
+                        label: '',  // required to avoid error but hidden
+                        value: careHours,
+                        onChanged: (val) => setState(() => careHours = val),
+                        min: 1,
+                        max: 4,
+                        divisions: 3,
+                      ),
+                    ),
+                    const SizedBox(height: 24),
 
-                    _buildTitle("4. 건강 상태나 제한 사항이 있는가?"),
+                    _buildTitle("4. 특별히 고려해야 할 건강 상태나 제한사항이 있나요?"),
                     _buildInput(healthNoteController),
                     const SizedBox(height: 24),
                   ],
@@ -128,20 +197,6 @@ class _SeniorSurveyScreenState extends State<SeniorSurveyScreen> {
         style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
       );
 
-  Widget _buildChoiceChips(
-      List<String> options, String selected, Function(String) onSelected) {
-    return Wrap(
-      spacing: 8,
-      children: options.map((opt) {
-        return ChoiceChip(
-          label: Text(opt),
-          selected: selected == opt,
-          onSelected: (_) => onSelected(opt),
-        );
-      }).toList(),
-    );
-  }
-
   Widget _buildInput(TextEditingController controller, {String? hint}) {
     return TextField(
       controller: controller,
@@ -153,8 +208,7 @@ class _SeniorSurveyScreenState extends State<SeniorSurveyScreen> {
     );
   }
 
-  Widget _buildStepCircle(BuildContext context,
-      {required int step, required bool isActive}) {
+  Widget _buildStepCircle(BuildContext context, {required int step, required bool isActive}) {
     final theme = Theme.of(context);
     return Container(
       width: 24,
@@ -186,22 +240,38 @@ class _SeniorSurveyScreenState extends State<SeniorSurveyScreen> {
   }
 
   void _handleSubmit() {
-    if (reasonController.text.isEmpty || careDuration.isEmpty) {
-      Get.snackbar('오류', '필수 항목을 입력해주세요');
+    if (reasonController.text.isEmpty || selectedServices.isEmpty) {
+      showCustomSnackbar(
+        title: '입력 오류',
+        message: '필수 항목을 모두 입력해주세요',
+      );
       return;
     }
+
     final data = {
       'userType': 'senior',
       'reason': reasonController.text,
-      'services': services.entries
-          .where((e) => e.value)
-          .map((e) => e.key)
-          .toList(),
+      'services': selectedServices,
       'otherService': otherServiceController.text,
-      'careDuration': careDuration,
+      'careDuration': getCareHourLabel(),
       'healthNotes': healthNoteController.text,
     };
-    print(data);
-    Get.snackbar('제출 완료', '시니어 설문이 제출되었습니다');
+    debugPrint(data.toString());
+
+    Get.to(() => const SignupCompleteScreen());
+  }
+
+  String getCareHourLabel() {
+    switch (careHours.round()) {
+      case 1:
+        return '1-2시간';
+      case 2:
+        return '3-4시간';
+      case 3:
+        return '5-6시간';
+      case 4:
+      default:
+        return '7시간 이상';
+    }
   }
 }

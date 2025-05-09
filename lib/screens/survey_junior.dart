@@ -1,6 +1,7 @@
-// 📄 survey_junior.dart
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:gachiga1/widgets/custom_snackbar.dart';
+import 'package:gachiga1/screens/signup_complete_screen.dart';
 
 class JuniorSurveyScreen extends StatefulWidget {
   const JuniorSurveyScreen({super.key});
@@ -11,16 +12,21 @@ class JuniorSurveyScreen extends StatefulWidget {
 
 class _JuniorSurveyScreenState extends State<JuniorSurveyScreen> {
   String experience = '';
-  String timeSlot = '';
-  final TextEditingController scopeController = TextEditingController();
+  List<String> selectedTimeSlots = [];
+  List<String> selectedCareTypes = [];
   final TextEditingController importantController = TextEditingController();
-  final TextEditingController valueController = TextEditingController();
+
+  final List<String> careTimeOptions = ['아침', '점심', '저녁', '무관'];
+
+  final List<Map<String, String>> careTypeOptions = [
+    {'label': '정서 교류 및 관계 형성', 'desc': '정서적 활동, 말벗, 식사 함께하기 등'},
+    {'label': '생활 및 지원 제공', 'desc': '청소, 세탁, 식사 준비, 복약, 쓰레기 정리, 외부 교육 등'},
+    {'label': '건강관리 보조', 'desc': '산책 동행, 복약 체크, 병원, 관련한 도움 등'},
+  ];
 
   @override
   void dispose() {
-    scopeController.dispose();
     importantController.dispose();
-    valueController.dispose();
     super.dispose();
   }
 
@@ -67,22 +73,68 @@ class _JuniorSurveyScreenState extends State<JuniorSurveyScreen> {
                     }),
                     const SizedBox(height: 16),
 
-                    _buildTitle("2. 돌봄을 제공할 수 있는 시간대"),
-                    _buildChoiceChips(['아침', '점심', '저녁', '무관'], timeSlot, (val) {
-                      setState(() => timeSlot = val);
-                    }),
+                    _buildTitle("2. 돌봄을 제공할 수 있는 시간대 (다중선택 가능)"),
+                    Wrap(
+                      spacing: 8,
+                      children: careTimeOptions.map((option) {
+                        final isSelected = selectedTimeSlots.contains(option);
+                        return FilterChip(
+                          label: Text(option),
+                          selected: isSelected,
+                          onSelected: (selected) {
+                            setState(() {
+                              if (selected) {
+                                selectedTimeSlots.add(option);
+                              } else {
+                                selectedTimeSlots.remove(option);
+                              }
+                            });
+                          },
+                        );
+                      }).toList(),
+                    ),
                     const SizedBox(height: 16),
 
-                    _buildTitle("3. 제공 가능한 돌봄 범위"),
-                    _buildInput(scopeController),
-                    const SizedBox(height: 16),
+                    _buildTitle("3. 제공 가능한 돌봄 범위 (다중선택 가능)"),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: careTypeOptions.map((item) {
+                        final selected = selectedCareTypes.contains(item['label']);
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 4),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              FilterChip(
+                                label: Text(item['label']!),
+                                selected: selected,
+                                onSelected: (bool value) {
+                                  setState(() {
+                                    if (value) {
+                                      selectedCareTypes.add(item['label']!);
+                                    } else {
+                                      selectedCareTypes.remove(item['label']!);
+                                    }
+                                  });
+                                },
+                              ),
+                              const SizedBox(height: 4),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 8),
+                                child: Text(
+                                  item['desc']!,
+                                  style: const TextStyle(fontSize: 12, color: Colors.grey),
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                    const SizedBox(height: 24),
 
-                    _buildTitle("4. 노인과 함께 생활할 때 가장 중요하게 생각하는 것은?"),
+                    _buildTitle("4. 돌봄 시 가장 중요하게 생각하는 것은 무엇인가요?"),
                     _buildInput(importantController),
-                    const SizedBox(height: 16),
-
-                    _buildTitle("5. 돌봄에 대한 기대 수준"),
-                    _buildInput(valueController),
                     const SizedBox(height: 24),
                   ],
                 ),
@@ -119,8 +171,7 @@ class _JuniorSurveyScreenState extends State<JuniorSurveyScreen> {
         style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
       );
 
-  Widget _buildChoiceChips(
-      List<String> options, String selected, Function(String) onSelected) {
+  Widget _buildChoiceChips(List<String> options, String selected, Function(String) onSelected) {
     return Wrap(
       spacing: 8,
       children: options.map((opt) {
@@ -144,8 +195,7 @@ class _JuniorSurveyScreenState extends State<JuniorSurveyScreen> {
     );
   }
 
-  Widget _buildStepCircle(BuildContext context,
-      {required int step, required bool isActive}) {
+  Widget _buildStepCircle(BuildContext context, {required int step, required bool isActive}) {
     final theme = Theme.of(context);
     return Container(
       width: 24,
@@ -177,19 +227,19 @@ class _JuniorSurveyScreenState extends State<JuniorSurveyScreen> {
   }
 
   void _handleSubmit() {
-    if (experience.isEmpty || timeSlot.isEmpty || scopeController.text.isEmpty) {
-      Get.snackbar('오류', '필수 항목을 입력해주세요');
+    if (experience.isEmpty || selectedTimeSlots.isEmpty || selectedCareTypes.isEmpty) {
+    showCustomSnackbar(title: '입력 오류', message: '필수 항목을 모두 입력해주세요');
       return;
     }
     final data = {
       'userType': 'junior',
-      'timeSlot': timeSlot,
       'experience': experience,
-      'scope': scopeController.text,
+      'timeSlots': selectedTimeSlots,
+      'careTypes': selectedCareTypes,
       'important': importantController.text,
-      'value': valueController.text,
     };
     print(data);
     Get.snackbar('제출 완료', '주니어 설문이 제출되었습니다');
+    Get.to(() => const SignupCompleteScreen());
   }
 }

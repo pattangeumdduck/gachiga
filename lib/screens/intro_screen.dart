@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gachiga1/screens/login.dart';
 import 'package:gachiga1/screens/user_type_selection_screen.dart';
+import 'package:gachiga1/theme.dart';
 
 class IntroScreen extends StatelessWidget {
   const IntroScreen({super.key});
@@ -28,11 +29,11 @@ class IntroScreen extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               Text(
-                '확정 시 텍스트 or welcome 문구',
+                '~한 돌봄서비스,\n 같이 가',
                 style: theme.textTheme.bodyMedium?.copyWith(
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
-                  color: Colors.black87,
+                  color: AppTheme.primary,  
                 ),
                 textAlign: TextAlign.center,
               ),

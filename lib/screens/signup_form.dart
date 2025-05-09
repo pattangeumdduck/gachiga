@@ -22,6 +22,8 @@ class _SignupFormScreenState extends State<SignupFormScreen> {
 
   String _gender = '남자';
   DateTime? _selectedDate;
+  bool _obscurePassword = true;
+  bool _obscureConfirm = true;
 
   @override
   void dispose() {
@@ -182,11 +184,27 @@ class _SignupFormScreenState extends State<SignupFormScreen> {
                       const SizedBox(height: 24),
                       Text('비밀번호', style: theme.textTheme.bodyMedium),
                       const SizedBox(height: 8),
+                      Text(
+                        '영문 대/소문자, 숫자, 특수문자 조합 8자 이상',
+                        style: theme.textTheme.bodySmall?.copyWith(color: Colors.grey),
+                      ),
+                      const SizedBox(height: 8),
                       TextFormField(
                         controller: _passwordController,
-                        obscureText: true,
-                        decoration: const InputDecoration(
-                          hintText: '비밀번호를 입력해주세요 (8자 이상)',
+                        obscureText: _obscurePassword,
+                        decoration: InputDecoration(
+                          hintText: '비밀번호를 입력해주세요',
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _obscurePassword ? Icons.visibility_off : Icons.visibility,
+                              color: Colors.grey,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _obscurePassword = !_obscurePassword;
+                              });
+                            },
+                          ),
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -198,14 +216,25 @@ class _SignupFormScreenState extends State<SignupFormScreen> {
                           return null;
                         },
                       ),
-                      const SizedBox(height: 24),
+                      const SizedBox(height: 16),
                       Text('비밀번호 확인', style: theme.textTheme.bodyMedium),
                       const SizedBox(height: 8),
                       TextFormField(
                         controller: _confirmPasswordController,
-                        obscureText: true,
-                        decoration: const InputDecoration(
+                        obscureText: _obscureConfirm,
+                        decoration: InputDecoration(
                           hintText: '비밀번호를 다시 입력해주세요',
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _obscureConfirm ? Icons.visibility_off : Icons.visibility,
+                              color: Colors.grey,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _obscureConfirm = !_obscureConfirm;
+                              });
+                            },
+                          ),
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {

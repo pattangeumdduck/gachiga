@@ -52,27 +52,49 @@ class _HomeScreenState extends State<HomeScreen> {
         currentIndex: _selectedIndex,
         onTap: (index) => setState(() => _selectedIndex = index),
         type: BottomNavigationBarType.fixed,
-        selectedItemColor: Theme.of(context).primaryColor,
-        unselectedItemColor: Colors.grey,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: '홈',
+        items: [
+        BottomNavigationBarItem(
+          icon: Image.asset(
+            _selectedIndex == 0
+                ? 'assets/images/Selected=Yes, Type=Home.png'
+                : 'assets/images/Selected=No, Type=Home.png',
+            width: 24,
+            height: 24,
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.handshake),
-            label: '매칭',
+          label: '',
+        ),
+        BottomNavigationBarItem(
+          icon: Image.asset(
+            _selectedIndex == 1
+                ? 'assets/images/Selected=Yes, Type=Share.png'
+                : 'assets/images/Selected=No, Type=Share.png',
+            width: 24,
+            height: 24,
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
-            label: '케어',
+          label: '',
+        ),
+        BottomNavigationBarItem(
+          icon: Image.asset(
+            _selectedIndex == 2
+                ? 'assets/images/Selected=Yes, Type=Care.png'
+                : 'assets/images/Selected=No, Type=Care.png',
+            width: 24,
+            height: 24,
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: '마이',
+          label: '',
+        ),
+        BottomNavigationBarItem(
+          icon: Image.asset(
+            _selectedIndex == 3
+                ? 'assets/images/Selected=Yes, Type=My.png'
+                : 'assets/images/Selected=No, Type=My.png',
+            width: 24,
+            height: 24,
           ),
+          label: '',
+        ),
         ],
-      ),
+        ),
     );
   }
 }
