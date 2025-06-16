@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:gachiga1/screens/login.dart';
 import 'package:gachiga1/screens/user_type_selection_screen.dart';
-import 'package:gachiga1/theme.dart';
 
 class IntroScreen extends StatelessWidget {
   const IntroScreen({super.key});
@@ -10,75 +10,105 @@ class IntroScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      backgroundColor: Colors.white,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+          padding: const EdgeInsets.all(24),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Spacer(flex: 2),
-              // ✅ 반응형 로고
-              Image.asset(
-                'assets/images/logo.png',
-                width: size.width * 0.6,
-                height: size.width * 0.6,
+              const Spacer(),
+
+              // 로고 SVG
+              SvgPicture.asset(
+                'assets/images/login_logo.svg',
+                height: 80,
               ),
-              const SizedBox(height: 16),
-              Text(
-                '~한 돌봄서비스,\n 같이 가',
-                style: theme.textTheme.bodyMedium?.copyWith(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                  color: AppTheme.primary,  
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const Spacer(flex: 3),
-              SizedBox(
-                width: double.infinity,
-                height: 56,
-                child: ElevatedButton(
-                  onPressed: () => Get.to(() => const LoginScreen()),
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                  ),
-                  child: const Text('로그인'),
-                ),
-              ),
-              const SizedBox(height: 16),
-              OutlinedButton(
-                onPressed: () => Get.to(() => UserTypeSelectionScreen()),
-                style: OutlinedButton.styleFrom(
-                  minimumSize: const Size(double.infinity, 56),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  side: BorderSide(color: theme.primaryColor),
-                ),
-                child: const Text.rich(
-                  TextSpan(
-                    text: '회원이 아니신가요? ',
-                    style: TextStyle(color: Colors.black87),
-                    children: [
-                      TextSpan(
-                        text: '회원가입 하기',
-                        style: TextStyle(
-                          color: Color(0xFF0062FF),
-                          fontWeight: FontWeight.bold,
-                          decoration: TextDecoration.underline,
+
+              const Spacer(),
+
+              // 로그인 버튼 + 얼굴인식 버튼
+              Row(
+                children: [
+                  Expanded(
+                    child: SizedBox(
+                      height: 48,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Get.to(() => LoginScreen());
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: theme.primaryColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                        ),
+                        child: const Text(
+                          '로그인',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
-                    ],
+                    ),
+                  ),
+                  const SizedBox(width: 13),
+
+                  // 얼굴인식 SVG 버튼 전체 대체
+                  GestureDetector(
+                    onTap: () {
+                      // TODO: 얼굴 인식 동작
+                    },
+                    child: SvgPicture.asset(
+                      'assets/images/face_login.svg',
+                      width: 70,
+                      height: 70,
+                    ),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 12),
+
+              // 회원가입 버튼
+              SizedBox(
+                width: double.infinity,
+                height: 48,
+                child: OutlinedButton(
+                  onPressed: () {
+                    Get.to(() =>  UserTypeSelectionScreen());
+                  },
+                  style: OutlinedButton.styleFrom(
+                    side: BorderSide(color: theme.primaryColor),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(24),
+                    ),
+                  ),
+                  child: RichText(
+                    text: TextSpan(
+                      text: '회원이 아니신가요? ',
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 14,
+                      ),
+                      children: const [
+                        TextSpan(
+                          text: '회원가입',
+                          style: TextStyle(
+                            color: Colors.black,
+                            decoration: TextDecoration.underline,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ),
-              const Spacer(),
+
+              const SizedBox(height: 30), // 하단 여백
             ],
           ),
         ),

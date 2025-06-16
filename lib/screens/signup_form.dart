@@ -163,7 +163,7 @@ class _SignupFormScreenState extends State<SignupFormScreen> {
                         selectedBorderColor: theme.primaryColor,
                       ),
                       const SizedBox(height: 24),
-                      Text('이메일', style: theme.textTheme.bodyMedium),
+                      Text('아이디(이메일일)', style: theme.textTheme.bodyMedium),
                       const SizedBox(height: 8),
                       TextFormField(
                         controller: _emailController,
@@ -251,14 +251,14 @@ class _SignupFormScreenState extends State<SignupFormScreen> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(24.0),
+                padding: const EdgeInsets.all(24),
                 child: Row(
                   children: [
                     Expanded(
                       child: OutlinedButton(
                         onPressed: () => Get.back(),
                         style: OutlinedButton.styleFrom(
-                          minimumSize: const Size(double.infinity, 60),
+                          minimumSize: const Size(double.infinity, 40),
                         ),
                         child: const Text('이전'),
                       ),
@@ -291,7 +291,7 @@ class _SignupFormScreenState extends State<SignupFormScreen> {
                           }
                         },
                         style: ElevatedButton.styleFrom(
-                          minimumSize: const Size(double.infinity, 60),
+                          minimumSize: const Size(double.infinity, 40),
                         ),
                         child: const Text('다음'),
                       ),

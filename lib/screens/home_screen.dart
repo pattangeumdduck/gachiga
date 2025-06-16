@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:gachiga1/controllers/auth_controller.dart';
 import 'package:gachiga1/screens/my_page_screen.dart';
@@ -18,9 +19,12 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final AuthController authController = Get.find<AuthController>();
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('같이가'),
+        title: Text(
+          _selectedIndex == 3 ? '마이 홈' : '같이가',
+        ),
         centerTitle: true,
         actions: [
           Obx(() => TextButton(
@@ -42,7 +46,9 @@ class _HomeScreenState extends State<HomeScreen> {
       body: IndexedStack(
         index: _selectedIndex,
         children: [
-          Center(child: Text('홈', style: Theme.of(context).textTheme.headlineSmall)),
+          Center(
+              child:
+                  Text('홈', style: Theme.of(context).textTheme.headlineSmall)),
           const MatchingScreen(),
           const CareScreen(),
           const MyPageScreen(),
@@ -52,49 +58,51 @@ class _HomeScreenState extends State<HomeScreen> {
         currentIndex: _selectedIndex,
         onTap: (index) => setState(() => _selectedIndex = index),
         type: BottomNavigationBarType.fixed,
+        showSelectedLabels: false,
+        showUnselectedLabels: false,
         items: [
-        BottomNavigationBarItem(
-          icon: Image.asset(
-            _selectedIndex == 0
-                ? 'assets/images/Selected=Yes, Type=Home.png'
-                : 'assets/images/Selected=No, Type=Home.png',
-            width: 24,
-            height: 24,
+          BottomNavigationBarItem(
+            icon: SvgPicture.asset(
+              _selectedIndex == 0
+                  ? 'assets/images/Selected=Yes, Type=Home.svg'
+                  : 'assets/images/Selected=No, Type=Home.svg',
+              width: 60,
+              height: 60,
+            ),
+            label: '',
           ),
-          label: '',
-        ),
-        BottomNavigationBarItem(
-          icon: Image.asset(
-            _selectedIndex == 1
-                ? 'assets/images/Selected=Yes, Type=Share.png'
-                : 'assets/images/Selected=No, Type=Share.png',
-            width: 24,
-            height: 24,
+          BottomNavigationBarItem(
+            icon: SvgPicture.asset(
+              _selectedIndex == 1
+                  ? 'assets/images/Selected=Yes, Type=Share.svg'
+                  : 'assets/images/Selected=No, Type=Share.svg',
+              width: 60,
+              height: 60,
+            ),
+            label: '',
           ),
-          label: '',
-        ),
-        BottomNavigationBarItem(
-          icon: Image.asset(
-            _selectedIndex == 2
-                ? 'assets/images/Selected=Yes, Type=Care.png'
-                : 'assets/images/Selected=No, Type=Care.png',
-            width: 24,
-            height: 24,
+          BottomNavigationBarItem(
+            icon: SvgPicture.asset(
+              _selectedIndex == 2
+                  ? 'assets/images/Selected=Yes, Type=Care.svg'
+                  : 'assets/images/Selected=No, Type=Care.svg',
+              width: 60,
+              height: 60,
+            ),
+            label: '',
           ),
-          label: '',
-        ),
-        BottomNavigationBarItem(
-          icon: Image.asset(
-            _selectedIndex == 3
-                ? 'assets/images/Selected=Yes, Type=My.png'
-                : 'assets/images/Selected=No, Type=My.png',
-            width: 24,
-            height: 24,
+          BottomNavigationBarItem(
+            icon: SvgPicture.asset(
+              _selectedIndex == 3
+                  ? 'assets/images/Selected=Yes, Type=My.svg'
+                  : 'assets/images/Selected=No, Type=My.svg',
+              width: 60,
+              height: 60,
+            ),
+            label: '',
           ),
-          label: '',
-        ),
         ],
-        ),
+      ),
     );
   }
 }

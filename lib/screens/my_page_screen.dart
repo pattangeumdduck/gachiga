@@ -1,92 +1,166 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
-class MyPageScreen extends StatefulWidget {
-  const MyPageScreen({Key? key}) : super(key: key);
-
-  @override
-  _MyPageScreenState createState() => _MyPageScreenState();
-}
-
-class _MyPageScreenState extends State<MyPageScreen> {
-  String nickname = "사용자 닉네임";
-  // 프로필 사진 URL 또는 파일 경로 (없으면 null)
-  String? profileImageUrl;
-
-  void _onProfilePhotoTap() {
-    // 실제 이미지 피커나 사진 등록 로직
-    Get.snackbar("프로필 사진", "프로필 사진을 선택합니다.");
-  }
-
-  void _onEditProfile() {
-    // 수정 로직 (예: 다이얼로그 또는 별도 화면)
-    Get.snackbar("프로필 수정", "프로필 정보를 수정합니다.");
-  }
-
-  void _onTermsTap() {
-    Get.snackbar("이용약관", "이용약관 페이지로 이동합니다.");
-  }
-
-  void _onPrivacyTap() {
-    Get.snackbar("개인정보 처리 방침", "개인정보 처리 방침 페이지로 이동합니다.");
-  }
+class MyPageScreen extends StatelessWidget {
+  const MyPageScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
-      // 앱바 제거
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          // 세로 방향으로 가운데 정렬
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              // 프로필 이미지
-              const SizedBox(height: 20),
-              GestureDetector(
-                onTap: _onProfilePhotoTap,
-                child: CircleAvatar(
-                  radius: 40,
-                  backgroundColor: Colors.grey[300],
-                  backgroundImage: profileImageUrl != null
-                      ? NetworkImage(profileImageUrl!)
-                      : const AssetImage('assets/images/image_needs.jpg')
-                          as ImageProvider,
-                ),
-              ),
-              const SizedBox(height: 16),
-              // 닉네임
-              Text(
-                nickname,
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              // 수정 버튼
-              TextButton(
-                onPressed: _onEditProfile,
-                child: const Text("수정"),
-              ),
-              const Spacer(),
-              // 하단 링크 버튼들
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  TextButton(
-                    onPressed: _onTermsTap,
-                    child: const Text("이용약관"),
-                  ),
-                  const SizedBox(width: 16),
-                  TextButton(
-                    onPressed: _onPrivacyTap,
-                    child: const Text("개인정보 처리 방침"),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            // 상단 카드
+            Container(
+              margin: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(24),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    blurRadius: 10,
+                    offset: const Offset(0, 4),
                   ),
                 ],
               ),
-            ],
-          ),
+              child: Column(
+                children: [
+                  // 프로필 정보
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      CircleAvatar(
+                        radius: 36,
+                        backgroundColor: Colors.grey[300],
+                        child: const Icon(Icons.person, size: 36),
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: const [
+                          Chip(
+                            label: Text(
+                              '주니어',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                              ),
+                            ),
+                            backgroundColor: Colors.blue,
+                            visualDensity: VisualDensity.compact,
+                          ),
+                          SizedBox(height: 8),
+                          Text(
+                            '같이가 테스터 님',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                          Text(
+                            'gachiga123@gmail.com',
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 13,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: const [
+                          Icon(Icons.settings),
+                          SizedBox(width: 8),
+                          Icon(Icons.notifications_none),
+                        ],
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 16),
+
+                  // 내 프로필 보기 버튼
+                  OutlinedButton(
+                    onPressed: () {
+                      // TODO: 프로필 보기
+                    },
+                    style: OutlinedButton.styleFrom(
+                      side: BorderSide(color: theme.primaryColor),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: const Text('내 프로필 보기'),
+                  ),
+
+                  const SizedBox(height: 16),
+
+                  // 신청 목록 + 돌봄 데이터 버튼 (SVG)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          // TODO: 신청 목록 보기
+                        },
+                        child: SvgPicture.asset(
+                          'assets/images/mypage_admit_list_button.svg',
+                          height: 30,
+                        ),
+                      ),
+                      const SizedBox(width: 24),
+                      GestureDetector(
+                        onTap: () {
+                          // TODO: 돌봄 데이터 보기
+                        },
+                        child: SvgPicture.asset(
+                          'assets/images/care_data_button.svg',
+                          height: 30,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+
+            // 하단 메뉴 1
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  '메뉴 1',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+            ...List.generate(
+              3,
+              (i) => const ListTile(
+                title: Text('마이 홈 메뉴'),
+              ),
+            ),
+            const Divider(),
+
+            // 하단 메뉴 2
+            const Padding(
+              padding: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  '메뉴 2',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+            ),
+            ...List.generate(
+              3,
+              (i) => const ListTile(
+                title: Text('마이 홈 메뉴'),
+              ),
+            ),
+          ],
         ),
       ),
     );
