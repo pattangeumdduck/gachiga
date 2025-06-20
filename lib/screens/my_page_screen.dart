@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:gachiga1/screens/profile_detail_screen.dart'; // import 추가
+import 'request_inbox_screen.dart';
 
 class MyPageScreen extends StatelessWidget {
   const MyPageScreen({super.key});
@@ -80,17 +83,9 @@ class MyPageScreen extends StatelessWidget {
                   const SizedBox(height: 16),
 
                   // 내 프로필 보기 버튼
-                  OutlinedButton(
-                    onPressed: () {
-                      // TODO: 프로필 보기
-                    },
-                    style: OutlinedButton.styleFrom(
-                      side: BorderSide(color: theme.primaryColor),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    child: const Text('내 프로필 보기'),
+                  ElevatedButton(
+                    onPressed: () => Get.to(() => const ProfileDetailScreen()),
+                    child: const Text("내 프로필 보기"),
                   ),
 
                   const SizedBox(height: 16),
@@ -111,7 +106,7 @@ class MyPageScreen extends StatelessWidget {
                       const SizedBox(width: 24),
                       GestureDetector(
                         onTap: () {
-                          // TODO: 돌봄 데이터 보기
+                          Get.to(() => const RequestInboxScreen());
                         },
                         child: SvgPicture.asset(
                           'assets/images/care_data_button.svg',

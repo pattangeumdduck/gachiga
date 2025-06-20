@@ -1,180 +1,193 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'care_detail_screen.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'request_inbox_screen.dart';
 
-class CareScreen extends StatefulWidget {
-  const CareScreen({Key? key}) : super(key: key);
-
-  @override
-  _CareScreenState createState() => _CareScreenState();
-}
-
-class _CareScreenState extends State<CareScreen> {
-  // 회원 유형: 'senior'이면 시니어 회원은 본인을 올린 주니어 회원의 리스트를, 'junior'이면 반대로 표시합니다.
-  String userType = 'senior';
-
-  // 10개의 더미 데이터 생성 (userType이 'senior'이면 보일 수 있도록 모두 'junior'로 설정)
-  List<Map<String, dynamic>> careItems = List.generate(10, (index) {
-    return {
-      'id': index + 1,
-      'profileImageUrl': null,
-      'description': '더미 아이템 ${index + 1}',
-      'survey': '설문 내용 예시 ${index + 1}',
-      'category': '전체',
-      'postedBy': 'junior',
-    };
-  });
-
-  String selectedCategory = '전체';
-
-  final TextEditingController _descriptionController = TextEditingController();
+class CareScreen extends StatelessWidget {
+  const CareScreen({super.key});
 
   @override
-  void dispose() {
-    _descriptionController.dispose();
-    super.dispose();
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: SvgPicture.asset(
+          'assets/images/login_logo.svg',
+          height: 24,
+        ),
+        centerTitle: true,
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const RequestInboxScreen()),
+              );
+            },
+            child: const Text("신청목록", style: TextStyle(color: Colors.blue)),
+          )
+        ],
+      ),
+      body: Column(
+        children: [
+          _buildProfileBanner(),
+          _buildSearchBar(),
+          _buildTagFilters(),
+          const Divider(height: 1),
+          Expanded(child: _buildCareList()),
+        ],
+      ),
+    );
   }
 
-  void _showAddCareModal() {
-    _descriptionController.clear();
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
+  Widget _buildProfileBanner() {
+    return Container(
+      margin: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.blue[50],
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
             children: [
-              const Text(
-                '리스트 등록',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 12),
-              TextField(
-                controller: _descriptionController,
-                decoration: const InputDecoration(
-                  labelText: '간단한 설명',
-                  border: OutlineInputBorder(),
+              const Icon(Icons.assignment, color: Colors.blue, size: 32),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    Text("프로필을 완성하고 케어를 신청해보세요!",
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    SizedBox(height: 4),
+                    Text("아직 확인이 완료된 정보가 없어요!", style: TextStyle(fontSize: 13)),
+                  ],
                 ),
               ),
-              const SizedBox(height: 12),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Text('취소'),
-                  ),
-                  ElevatedButton(
-                    onPressed: () {
-                      if (_descriptionController.text.isNotEmpty) {
-                        setState(() {
-                          careItems.add({
-                            'id': careItems.length + 1,
-                            'profileImageUrl': null,
-                            'description': _descriptionController.text,
-                            'survey': '가입 시 작성한 설문조사 예시',
-                            'category': selectedCategory,
-                            'postedBy': userType == 'senior' ? 'junior' : 'senior',
-                          });
-                        });
-                        Navigator.pop(context);
-                      } else {
-                        Get.snackbar('오류', '설명을 입력해주세요');
-                      }
-                    },
-                    child: const Text('등록하기'),
-                  ),
-                ],
+            ],
+          ),
+          const SizedBox(height: 12),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: () {
+                // TODO: 프로필 완성하러 가기
+              },
+              child: const Text("프로필 완성하러 가기"),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSearchBar() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      child: Row(
+        children: [
+          Expanded(
+            child: TextField(
+              decoration: InputDecoration(
+                hintText: "닉네임, 검색 내용",
+                prefixIcon: const Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                isDense: true,
               ),
+            ),
+          ),
+          const SizedBox(width: 8),
+          IconButton(
+            icon: const Icon(Icons.filter_list),
+            onPressed: () {
+              // TODO: 필터 기능
+            },
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTagFilters() {
+    final tags = ["전체", "정서 교류 및 관계 형성", "맞춤형", "왕복", "차량", "폰 텔레 상담"];
+    return SizedBox(
+      height: 40,
+      child: ListView.separated(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        scrollDirection: Axis.horizontal,
+        itemCount: tags.length,
+        separatorBuilder: (_, __) => const SizedBox(width: 8),
+        itemBuilder: (_, index) {
+          return Chip(
+            label: Text(tags[index]),
+            backgroundColor: Colors.grey[200],
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildCareList() {
+    return ListView.builder(
+      itemCount: 4, // 샘플 4개
+      itemBuilder: (context, index) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const CircleAvatar(radius: 20, child: Icon(Icons.person)),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: const [
+                    Text("가나다란 돌봄 102", style: TextStyle(fontWeight: FontWeight.bold)),
+                    SizedBox(height: 4),
+                    Text(
+                      "시니어 가나다란 돌봄활동 102건에 유니아버 분활을 요청합니다.",
+                      style: TextStyle(fontSize: 13),
+                    ),
+                    SizedBox(height: 8),
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 4,
+                      children: [
+                        _CareTag("여성"),
+                        _CareTag("70대"),
+                        _CareTag("왕복"),
+                        _CareTag("이해, 정서"),
+                        _CareTag("정리"),
+                      ],
+                    )
+                  ],
+                ),
+              )
             ],
           ),
         );
       },
     );
   }
+}
 
-  // 필터링: userType이 senior이면 postedBy가 junior인 항목만, junior이면 반대로 필터링
-  List<Map<String, dynamic>> get filteredCareItems {
-    return careItems.where((item) {
-      bool correctUserType = userType == 'senior'
-          ? item['postedBy'] == 'junior'
-          : item['postedBy'] == 'senior';
-      bool correctCategory = selectedCategory == '전체'
-          ? true
-          : item['category'] == selectedCategory;
-      return correctUserType && correctCategory;
-    }).toList();
-  }
-
-  Widget _buildCategoryBar() {
-    List<String> categories = ['전체', 'A', 'B', 'C'];
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        children: categories.map((cat) {
-          bool isSelected = cat == selectedCategory;
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: ChoiceChip(
-              label: Text(cat),
-              selected: isSelected,
-              onSelected: (_) {
-                setState(() {
-                  selectedCategory = cat;
-                });
-              },
-            ),
-          );
-        }).toList(),
-      ),
-    );
-  }
-
-  Widget _buildCareListItem(Map<String, dynamic> item) {
-    return ListTile(
-      leading: CircleAvatar(
-        backgroundColor: Colors.grey[300],
-        backgroundImage: item['profileImageUrl'] != null
-            ? NetworkImage(item['profileImageUrl'])
-            : null,
-        child: item['profileImageUrl'] == null
-            ? const Icon(Icons.person)
-            : null,
-      ),
-      title: Text(item['description']),
-      onTap: () {
-        Get.to(() => CareDetailScreen(careItem: item));
-      },
-    );
-  }
+class _CareTag extends StatelessWidget {
+  final String label;
+  const _CareTag(this.label, {super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      // 앱 바 제거됨
-      body: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: _buildCategoryBar(),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: filteredCareItems.length,
-              itemBuilder: (context, index) {
-                return _buildCareListItem(filteredCareItems[index]);
-              },
-            ),
-          ),
-        ],
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      decoration: BoxDecoration(
+        color: Colors.grey[100],
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: Colors.grey.shade300),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _showAddCareModal,
-        child: const Icon(Icons.add),
-      ),
+      child: Text(label, style: const TextStyle(fontSize: 12)),
     );
   }
 }
