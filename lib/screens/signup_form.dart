@@ -88,6 +88,7 @@ class _SignupFormScreenState extends State<SignupFormScreen> {
                                   controller: _nameController,
                                   decoration: const InputDecoration(
                                     hintText: '이름을 입력해주세요',
+                                    hintStyle: TextStyle(color: Colors.grey),
                                   ),
                                   validator: (value) =>
                                       value == null || value.isEmpty
@@ -163,13 +164,14 @@ class _SignupFormScreenState extends State<SignupFormScreen> {
                         selectedBorderColor: theme.primaryColor,
                       ),
                       const SizedBox(height: 24),
-                      Text('아이디(이메일일)', style: theme.textTheme.bodyMedium),
+                      Text('아이디(이메일)', style: theme.textTheme.bodyMedium),
                       const SizedBox(height: 8),
                       TextFormField(
                         controller: _emailController,
                         keyboardType: TextInputType.emailAddress,
                         decoration: const InputDecoration(
                           hintText: '예) example@gmail.com',
+                          hintStyle: TextStyle(color: Colors.grey),
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -194,6 +196,7 @@ class _SignupFormScreenState extends State<SignupFormScreen> {
                         obscureText: _obscurePassword,
                         decoration: InputDecoration(
                           hintText: '비밀번호를 입력해주세요',
+                          hintStyle: TextStyle(color: Colors.grey),
                           suffixIcon: IconButton(
                             icon: Icon(
                               _obscurePassword ? Icons.visibility_off : Icons.visibility,
@@ -224,6 +227,7 @@ class _SignupFormScreenState extends State<SignupFormScreen> {
                         obscureText: _obscureConfirm,
                         decoration: InputDecoration(
                           hintText: '비밀번호를 다시 입력해주세요',
+                          hintStyle: TextStyle(color: Colors.grey),
                           suffixIcon: IconButton(
                             icon: Icon(
                               _obscureConfirm ? Icons.visibility_off : Icons.visibility,

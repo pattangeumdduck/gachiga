@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+
 class ProfileDetailScreen extends StatelessWidget {
   const ProfileDetailScreen({super.key});
 
@@ -9,9 +10,18 @@ class ProfileDetailScreen extends StatelessWidget {
     final theme = Theme.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('내 프로필'),
+        backgroundColor: Colors.white, // 살짝 그림자
+        centerTitle: true,
+        title: const Text(
+          '내 프로필',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Get.back(),
         ),
       ),

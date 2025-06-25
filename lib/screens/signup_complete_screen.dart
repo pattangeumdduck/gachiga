@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:gachiga1/screens/home_screen.dart';
-
+import 'profile_detail_screen.dart';
 class SignupCompleteScreen extends StatelessWidget {
   const SignupCompleteScreen({super.key});
 
@@ -47,7 +47,7 @@ class SignupCompleteScreen extends StatelessWidget {
                 height: 48,
                 child: OutlinedButton(
                   onPressed: () {
-                    // TODO: 프로필 작성 끝내기 액션
+                    Get.to(() => const ProfileDetailScreen());
                   },
                   style: OutlinedButton.styleFrom(
                     side: BorderSide(color: theme.primaryColor),

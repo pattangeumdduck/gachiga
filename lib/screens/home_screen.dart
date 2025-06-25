@@ -62,42 +62,54 @@ class _HomeScreenState extends State<HomeScreen> {
         showUnselectedLabels: false,
         items: [
           BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              _selectedIndex == 0
-                  ? 'assets/images/Selected=Yes, Type=Home.svg'
-                  : 'assets/images/Selected=No, Type=Home.svg',
-              width: 60,
-              height: 60,
+            icon: SizedBox(
+              width: 50,
+              height: 50,
+              child: SvgPicture.asset(
+                _selectedIndex == 0
+                    ? 'assets/images/Selected=Yes, Type=Home.svg'
+                    : 'assets/images/Selected=No, Type=Home.svg',
+                fit: BoxFit.contain,
+              ),
             ),
             label: '',
           ),
           BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              _selectedIndex == 1
-                  ? 'assets/images/Selected=Yes, Type=Share.svg'
-                  : 'assets/images/Selected=No, Type=Share.svg',
-              width: 60,
-              height: 60,
+            icon: SizedBox(
+              width: 50,
+              height: 50,
+              child: SvgPicture.asset(
+                _selectedIndex == 1
+                    ? 'assets/images/Selected=Yes, Type=Share.svg'
+                    : 'assets/images/Selected=No, Type=Share.svg',
+                fit: BoxFit.contain,
+              ),
             ),
             label: '',
           ),
           BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              _selectedIndex == 2
-                  ? 'assets/images/Selected=Yes, Type=Care.svg'
-                  : 'assets/images/Selected=No, Type=Care.svg',
-              width: 60,
-              height: 60,
+            icon: SizedBox(
+              width: 50,
+              height: 50,
+              child: SvgPicture.asset(
+                _selectedIndex == 2
+                    ? 'assets/images/Selected=Yes, Type=Care.svg'
+                    : 'assets/images/Selected=No, Type=Care.svg',
+                fit: BoxFit.contain,
+              ),
             ),
             label: '',
           ),
           BottomNavigationBarItem(
-            icon: SvgPicture.asset(
-              _selectedIndex == 3
-                  ? 'assets/images/Selected=Yes, Type=My.svg'
-                  : 'assets/images/Selected=No, Type=My.svg',
-              width: 60,
-              height: 60,
+            icon: SizedBox(
+              width: 50,
+              height: 50,
+              child: SvgPicture.asset(
+                _selectedIndex == 3
+                    ? 'assets/images/Selected=Yes, Type=My.svg'
+                    : 'assets/images/Selected=No, Type=My.svg',
+                fit: BoxFit.contain,
+              ),
             ),
             label: '',
           ),

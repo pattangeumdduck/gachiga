@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'request_inbox_screen.dart';
+import 'profile_detail_screen.dart';
 
 class CareScreen extends StatelessWidget {
   const CareScreen({super.key});
@@ -72,7 +73,7 @@ class CareScreen extends StatelessWidget {
             width: double.infinity,
             child: ElevatedButton(
               onPressed: () {
-                // TODO: 프로필 완성하러 가기
+                Get.to(() => const ProfileDetailScreen());
               },
               child: const Text("프로필 완성하러 가기"),
             ),

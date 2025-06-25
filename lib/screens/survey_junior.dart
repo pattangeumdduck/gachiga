@@ -191,6 +191,7 @@ class _JuniorSurveyScreenState extends State<JuniorSurveyScreen> {
       decoration: InputDecoration(
         border: const OutlineInputBorder(),
         hintText: hint ?? '입력해주세요',
+        hintStyle: TextStyle(color: Colors.grey),
       ),
     );
   }
