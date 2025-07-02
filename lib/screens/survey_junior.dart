@@ -133,7 +133,8 @@ class _JuniorSurveyScreenState extends State<JuniorSurveyScreen> {
                     ),
                     const SizedBox(height: 24),
 
-                    _buildTitle("4. 돌봄 시 가장 중요하게 생각하는 것은 무엇인가요?"),
+                    _buildTitle("4. 함께 시간을 보낼 때 가장 중요하게 생각하는 것은 무엇인가요? \n"),
+          
                     _buildInput(importantController),
                     const SizedBox(height: 24),
                   ],

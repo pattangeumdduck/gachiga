@@ -9,13 +9,32 @@ class CareScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<String> bannerImages = [
+      'assets/images/care_upper_banner=page1.svg',
+      'assets/images/care_upper_banner=page2.svg',
+      'assets/images/care_upper_banner=page3.svg',
+    ];
+    final List<VoidCallback> bannerRoutes = [
+      () => Get.toNamed('/care-banner-1'),
+      () => Get.toNamed('/care-banner-2'),
+      () => Get.toNamed('/care-banner-3'),
+    ];
+    final PageController _pageController = PageController();
+    int _currentPage = 0;
     return Scaffold(
       appBar: AppBar(
-        title: SvgPicture.asset(
-          'assets/images/login_logo.svg',
-          height: 24,
+        backgroundColor: Colors.white,
+        elevation: 0,
+        automaticallyImplyLeading: false,
+        surfaceTintColor: Colors.white,
+        scrolledUnderElevation: 0,
+        title: Align(
+          alignment: Alignment.centerLeft,
+          child: SvgPicture.asset(
+            'assets/images/login_logo.svg',
+            height: 28,
+          ),
         ),
-        centerTitle: true,
         actions: [
           TextButton(
             onPressed: () {
@@ -28,57 +47,54 @@ class CareScreen extends StatelessWidget {
           )
         ],
       ),
-      body: Column(
-        children: [
-          _buildProfileBanner(),
-          _buildSearchBar(),
-          _buildTagFilters(),
-          const Divider(height: 1),
-          Expanded(child: _buildCareList()),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildProfileBanner() {
-    return Container(
-      margin: const EdgeInsets.all(16),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.blue[50],
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
+      body: StatefulBuilder(
+        builder: (context, setState) {
+          return Column(
             children: [
-              const Icon(Icons.assignment, color: Colors.blue, size: 32),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    Text("프로필을 완성하고 케어를 신청해보세요!",
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    SizedBox(height: 4),
-                    Text("아직 확인이 완료된 정보가 없어요!", style: TextStyle(fontSize: 13)),
-                  ],
+              SizedBox(
+                height: 200,
+                child: PageView.builder(
+                  controller: _pageController,
+                  itemCount: bannerImages.length,
+                  onPageChanged: (index) => setState(() => _currentPage = index),
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: bannerRoutes[index],
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                        child: SvgPicture.asset(
+                          bannerImages[index],
+                          fit: BoxFit.contain,
+                          width: double.infinity,
+                          height: double.infinity,
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ),
+              // 페이지 인디케이터
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: List.generate(bannerImages.length, (index) =>
+                  Container(
+                    width: 8,
+                    height: 8,
+                    margin: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: _currentPage == index ? Colors.blue : Colors.grey[300],
+                    ),
+                  ),
+                ),
+              ),
+              _buildSearchBar(),
+              _buildTagFilters(),
+              const Divider(height: 1),
+              Expanded(child: _buildCareList()),
             ],
-          ),
-          const SizedBox(height: 12),
-          SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              onPressed: () {
-                Get.to(() => const ProfileDetailScreen());
-              },
-              child: const Text("프로필 완성하러 가기"),
-            ),
-          )
-        ],
+          );
+        },
       ),
     );
   }

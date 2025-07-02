@@ -1,15 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:gachiga1/screens/request_inbox_screen.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
-class RequestOutboxScreen extends StatelessWidget {
+class RequestOutboxScreen extends StatefulWidget {
   const RequestOutboxScreen({super.key});
+
+  @override
+  State<RequestOutboxScreen> createState() => _RequestOutboxScreenState();
+}
+
+class _RequestOutboxScreenState extends State<RequestOutboxScreen> {
+  bool isInboxSelected = false; // 보낸 신청이 선택된 상태
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("신청 목록", style: TextStyle(color: Colors.white)),
-        backgroundColor: Colors.blue,
+        title: const Text("신청 목록", style: TextStyle(color: Colors.white, fontSize: 20)),
+        backgroundColor: Color(0xFF1D60E7),
         foregroundColor: Colors.white,
         elevation: 0,
       ),
@@ -17,7 +25,7 @@ class RequestOutboxScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildTabBar(context),
-          const Divider(height: 1),
+          //const Divider(height: 1),
           Expanded(child: _buildRequestList()),
         ],
       ),
@@ -25,35 +33,70 @@ class RequestOutboxScreen extends StatelessWidget {
   }
 
   Widget _buildTabBar(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+    return Container(
+      height: 40,
+      decoration: BoxDecoration(
+        color: Colors.grey[200],
+      ),
       child: Row(
         children: [
-          GestureDetector(
-            onTap: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (_) => const RequestInboxScreen()),
-              );
-            },
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(20),
+          // 받은 신청 버튼
+          Expanded(
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  isInboxSelected = true;
+                });
+                Navigator.pushReplacement(
+                  context,
+                  PageRouteBuilder(
+                    pageBuilder: (_, __, ___) => const RequestInboxScreen(),
+                    transitionDuration: Duration.zero,
+                    reverseTransitionDuration: Duration.zero,
+                  ),
+                );
+              },
+              child: Container(
+                padding: EdgeInsets.zero,
+                decoration: BoxDecoration(
+                  color: isInboxSelected ? Colors.white : Colors.transparent,
+                ),
+                child: Center(
+                  child: Text(
+                    "받은 신청",
+                    style: TextStyle(
+                      color: isInboxSelected ? Colors.black : Colors.grey[600],
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
               ),
-              child: const Text("받은 신청", style: TextStyle(color: Colors.grey)),
             ),
           ),
-          const SizedBox(width: 8),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            decoration: BoxDecoration(
-              color: Colors.blue[50],
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: Colors.blue),
+          // 보낸 신청 버튼
+          Expanded(
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  isInboxSelected = false;
+                });
+              },
+              child: Container(
+                padding: EdgeInsets.zero,
+                decoration: BoxDecoration(
+                  color: !isInboxSelected ? Colors.white : Colors.transparent,
+                ),
+                child: Center(
+                  child: Text(
+                    "보낸 신청",
+                    style: TextStyle(
+                      color: !isInboxSelected ? Colors.black : Colors.grey[600],
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ),
             ),
-            child: const Text("보낸 신청", style: TextStyle(color: Colors.blue)),
           ),
         ],
       ),
@@ -63,23 +106,32 @@ class RequestOutboxScreen extends StatelessWidget {
   Widget _buildRequestList() {
     return ListView.separated(
       itemCount: 5,
-      separatorBuilder: (_, __) => const Divider(height: 1),
+      separatorBuilder: (_, __) => SizedBox.shrink(),
       itemBuilder: (context, index) {
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const CircleAvatar(radius: 20, child: Icon(Icons.person)),
+              CircleAvatar(
+                radius: 20,
+                backgroundColor: Colors.white,
+                child: SvgPicture.asset(
+                  'assets/images/Profile_Icon.svg',
+                  width: 40,
+                  height: 40,
+                  fit: BoxFit.contain,
+                ),
+              ),
               const SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: const [
-                    Text("가나다란 돌봄활동 102", style: TextStyle(fontWeight: FontWeight.bold)),
+                    Text("가느다란 물방울", style: TextStyle(fontWeight: FontWeight.bold)),
                     SizedBox(height: 4),
                     Text(
-                      "시니어 가나다란 돌봄활동 102건에 유니아버 분활을 요청했습니다.",
+                      "시니어 가느다란 물방울님께 돌봄활동 제공 의향을 물었습니다.",
                       style: TextStyle(fontSize: 13),
                     ),
                     SizedBox(height: 8),
